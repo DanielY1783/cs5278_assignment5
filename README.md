@@ -1,7 +1,11 @@
 # Text message reminders for undergraduate STEM students.
 
 The goal of the project is to help undergraduate STEM students at Vanderbilt, because STEM students here constantly seem stressed out with coursework. From an anecdotal perspective, it seems that students in the humanities often get free extensions for late essays, while STEM students often talk about hard deadlines and a lot of work. The goal is to create an application that will help STEM students get reminders for when their assignments are due since missed deadlines are often so catastrophic for STEM students.
+
+
 Moreover, I have personally heard of stories of students in Peabody college who will get personal text messages from professors, but have never heard of similar stories with STEM majors. One possible reason may be because STEM professors are concerned about privacy and don't want to give their phone number away. Another reason could be that with so many students in classes, it is very hard to send personal messages to all of them. The existing application framework allows users to anonymously send text messages to a centralized source, and the messages are forwarded to by the system to a group of other users. This seems like it would solve both potential hurdles because students would not be able to see their professors' phone numbers, and because professors could send messages to the entire class at once.
+
+
 To see if this idea interested any undergraduate STEM majors, I interviewed three STEM majors who are all pre-med students; it seems that pre-med students are more worried about grades and classes than any other group on campus. The questions were mostly open ended in asking what the students wanted to see and what they would be willing to participate in. While the sample size is quite small, it might be possible to infer that many STEM students would be interested in getting text message reminders. Of course, the reminders could be used in any classes; it just seems that some students in Peabody college may not need it because they already communicate with professors via text message.
  
 
