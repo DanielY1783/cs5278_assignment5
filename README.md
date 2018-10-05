@@ -123,4 +123,12 @@ After thinking of some ideas, my third step was to think of how these ideas woul
 
 For the communication between students, the current experts framework could be used to have all students registered as "experts" (renamed to a different role such as students) so that all other students would receive asked questions. The topics would again be converted to the course names to have students registered in those areas. However, the current framework only allows the person who asked the question to view replies. A modification would be needed so that all students registered in the course would see the answers so that students could also benefit from the discussion.
 
-The fourth step was to talk to STEM students and ask about what they wanted and what they used text messages for to see if 
+The fourth step was to talk to STEM students and ask about what they wanted and what they used text messages for to see if other students were interested in any of the ideas. Instead of just asking about one idea, I chose to ask about several different ideas to see which one STEM students would be interested in. The general feedback seemed to indicate that STEM students are interested in receiving text message reminders, so I decided to proceed with that option.
+
+The fifth step was to write out the documentation for the program to ensure that the correct design requirements are collected.
+
+The sixth step is to develop and test a quick prototype of the reminders program using the idea in step 3 to see if the idea is feasible. Since the exact interface and features may need to be changed during the process of writing the program, some tests may need to be written along with the program rather than before the program.
+
+The seventh step is to give the prototype to users (STEM students) to test to receive feedback on what features users like and which ones they would like to see changed. 
+
+Lastly, the goal is to repeat steps 6 and 7 to implement changes based on feedback by the users and give a new prototype to the users to test. This style of development process with a heavy emphasis on user feedback and wants was adopted because of teh fact that I have easy access to Vanderbilt students since I live on this campus. This is designed to help mitigate the risk of building the wrong software.
