@@ -101,4 +101,26 @@ a). Would be more willing to answer questions if he doesn’t get every question
 
 b). Not very likely to answer questions; would need some incentive to answer questions for others. Pretty unlikely to submit questions for others.
 
-c). Very unlikely to answer questions. Fairly willing to ask questions. 
+c). Very unlikely to answer questions. Fairly willing to ask questions.
+
+
+# Requirements
+The goal is to build on the existing framework for the text messaging application to allow students to receive reminders for classes (similar to the ones on Brightspace) via text message. Although there is currently an option to receive SMS reminders from Brightspace, half of the message is sometimes cut off and the student must log into Brightspace to view the actual reminder. 
+
+To facilitate this, the professor would need to register himself/herself as a professor of a course, while the students would need to register themselves as students. There would be some data structure to store the different courses and the professor and students in each course. Professors would text reminders to a centralized number, and the application would automatically send reminder to students in that course. 
+
+
+# Development Approach
+The first step was to figure out which group of people at Vanderbilt I wanted to help. I have noticed that students around me are often stressed out about coursework, and that STEM students seems especially stressed. Moreover, as a Computer Science student, I believe that I am more able to empathize with this particular gorup.
+
+The second step was to think of something that I personally felt would benefit students around me given my experiences at Vanderbilt. I came up with several ideas based on my experiences as a Vanderbilt STEM student. 
+
+The first idea was for reminders to be sent out via text message instead of Brightspace, since I thought that maybe this would help alleviate some of the stress by allowing students to have easier access to what is due soon. Moreover, I have heard stories of Peabody professors who personally text their students, and the students highly appreciate the personalized nature of interactions with professors. Although STEM professors may never interact with all students on such a personalized level due to large class sizes, text messages to students may be a good first step to make the lives of students more convenient.
+
+A second idea was to provide a platform for students to communicate anonymously with each other about classes. Right now, due to how big some STEM classes are, it may be difficult for students to know other students closely enough to ask them questions outside of class. By providing a means for students to communicate outside of class, STEM students may be able to ask questions about material they are confused about, helping them to understand the material more quickly to reduce stress.
+
+After thinking of some ideas, my third step was to think of how these ideas would fit within the existing framework to see if it would be practical to build these applications within the allotted time period. For the reminders system, the current experts framework could be adapted to have all the students registered as "experts" (the name would be changed to something such as students instead of experts), and the topic could be replaced with the course. The professor would then text reminders to the centralized system with the course as the keyword, and the students would then be automatically forwarded the reminders. A few modifications could be added once the base framework is adapted. The professor could be given as special role as a professor so that no one else could pose as the professor and send reminders to the number. Another improvement is that the reminder could be limited to a certain number of words to prevent overly long messages, since students usually prefer more concise texts.
+
+For the communication between students, the current experts framework could be used to have all students registered as "experts" (renamed to a different role such as students) so that all other students would receive asked questions. The topics would again be converted to the course names to have students registered in those areas. However, the current framework only allows the person who asked the question to view replies. A modification would be needed so that all students registered in the course would see the answers so that students could also benefit from the discussion.
+
+The fourth step was to talk to STEM students and ask about what they wanted and what they used text messages for to see if 
