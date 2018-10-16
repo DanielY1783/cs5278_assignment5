@@ -502,28 +502,31 @@
     [new-state (str user-id " is now an expert on " topic ".")]))
 
 
-;; Assignment 5 functions to implement text message based reminders for courses.
+;; Assignment 5 functions to implement text message based reminders for
+;; courses.
 
 ;; Takes the current application `state`, a `course` the student wants
 ;; to sign up for announcements for,
 ;; the student's `id` (e.g., phone number), and information
-;; about the student (`info`) and registers them as a student in the course.
+;; about the student (`info`) and registers them as a
+;; student in the course.
 ;; This function only returns a list of the actions needed rather than
 ;; actually completing the action.
 (defn students-register [state course id info]
-    ; Return action to insert all students.
-    [(action-insert [:student course id] info)])
+    ; Return action to insert all students into the correct course
+    ; and under the students group.
+    [(action-insert [course :students id] info)])
 
 ;; Add a student to a specific course by creating a new
 ;; state using the students-register function, and then
 ;; returning that new state along with a message indicating
 ;; that the student was successfully added to the course.
-(defn add-student [experts {:keys [args user-id]}]
+(defn add-student [state {:keys [args user-id]}]
   (let [
         ; Get the course the user wants to register for
         course (first args)
         ; Get new state using the students-register function
-        new-state (students-register experts course user-id {})]
+        new-state (students-register state course user-id {})]
     ; Return new state followed by message.
     [new-state (str user-id " is now a student in " course ".")]))
 
@@ -532,25 +535,27 @@
 ;; function, and the second word must be the course name to be sent
 ;; to the correct course.
 ;; Students parameter is a list of all students in the current course.
-(defn send-announcement [students {:keys [args user-id]}]
+(defn send-announcement [course-state {:keys [args user-id]}]
   (let [
+        ; Get the list of students from the course.
+        students-list (keys (get course-state :students))
         ; Get the course at the first word in the message.
         course (first args)
-        ; Get the announcement as everything including the course name so
-        ; that the students know what course the announcement is for
-        announcement (string/join " " args)
         ; Get the announcement content as everything except for the course name.
         announcement-content (string/join " " (rest args))
+        ; Create a string for the announcement indicating which
+        ; course it is store.
+        announcement (str course " announcement: " announcement-content)
         ; Send the message to all the students in the course.
-        message-action (action-send-msgs students announcement)
-        insert-action(action-inserts [:conversations] students user-id)
+        message-action (action-send-msgs students-list announcement)
+        insert-action(action-inserts [:conversations] students-list user-id)
         actions-list (concat message-action insert-action)]
     (cond
       ; Special response if announcement content is empty.
       (empty? announcement-content) [[](str "You have sent an empty announcement.")]
       ; Special response for if there are no students.
-      (nil? students) [[](str "There are no students enrolled in " course ".")]
-      (empty? students) [[](str "There are no students enrolled in " course ".")]
+      (nil? students-list) [[](str "There are no students enrolled in " course ".")]
+      (empty? students-list) [[](str "There are no students enrolled in " course ".")]
       ; Otherwise, send messages to all the students.
       :else [actions-list
               (str "You have sent an announcement to " course ".")])))
@@ -598,9 +603,13 @@
 
 ; Add query for students in assignment 5 by returning the list of students
 ; in a course.
+; (defn students-query [state-mgr pmsg]
+;   (let [[course]  (:args pmsg)]
+;     (list! state-mgr [:student course])))
 (defn students-query [state-mgr pmsg]
   (let [[course]  (:args pmsg)]
-    (list! state-mgr [:student course])))
+    (get! state-mgr [course])))
+
 
 
 ;; Don't edit!

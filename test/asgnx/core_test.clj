@@ -259,7 +259,7 @@
 ;; Test for register-students function
 (deftest register-students-test
   (testing "Return action to register students for a course"
-    (is (= [(action-insert [:student "cs5278" 12345] "info")]
+    (is (= [(action-insert ["cs5278" :students 12345] "info")]
            (students-register {} "cs5278" 12345 "info")))))
 
 ;; Integration testing for sending and receiving announcements.
@@ -297,7 +297,7 @@
                     system
                     "cs5278instructor"
                     "announcement cs5278 test tomorrow"))))
-      (is (= "cs5278 test tomorrow"
+      (is (= "cs5278 announcement: test tomorrow"
              (<!! (pending-send-msgs system "student1")))))))
       ; (is (= "test-user2 is now an expert on food."
       ;        (<!! (handle-message
