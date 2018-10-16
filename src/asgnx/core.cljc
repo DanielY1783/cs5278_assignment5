@@ -527,30 +527,30 @@
     ; Return new state followed by message.
     [new-state (str user-id " is now a student in " course ".")]))
 
-;; Function for instructor to send an announcement for a course
-(defn send-announcement [state {:keys [args user-id]}]
+;; Function for instructor to send an announcement for a course. Instructor
+;; must specify the first word as "announcement" to be routed to this
+;; function, and the second word must be the course name to be sent
+;; to the correct course.
+;; Students parameter is a list of all students in the current course.
+(defn send-announcement [students {:keys [args user-id]}]
   (let [
         ; Get the course at the first word in the message.
         course (first args)
-        ; Get the announcement as everything except for the first word
-        ; in the message.
-        announcement (string/join " " (rest args))
-        ; Get the map with all students
-        students-map (get state :students)
-        ; Get the students in the course.
-        course-map (get students-map course)
-        ; Get the students in the course as the keys
-        course-students (keys course-map)
+        ; Get the announcement as everything including the course name so
+        ; that the students know what course the announcement is for
+        announcement (string/join " " args)
+        ; Get the announcement content as everything except for the course name.
+        announcement-content (string/join " " (rest args))
         ; Send the message to all the students in the course.
-        message-action (action-send-msgs course-students announcement)
-        insert-action(action-inserts [:conversations] state user-id)
+        message-action (action-send-msgs students announcement)
+        insert-action(action-inserts [:conversations] students user-id)
         actions-list (concat message-action insert-action)]
     (cond
-      ; Special response if announcement is empty.
-      (empty? announcement) [[](str "You have sent an empty announcement.")]
+      ; Special response if announcement content is empty.
+      (empty? announcement-content) [[](str "You have sent an empty announcement.")]
       ; Special response for if there are no students.
-      (nil? course-students) [[](str "There are no students enrolled in " course ".")]
-      (empty? course-students) [[](str "There are no students enrolled in " course ".")]
+      (nil? students) [[](str "There are no students enrolled in " course ".")]
+      (empty? students) [[](str "There are no students enrolled in " course ".")]
       ; Otherwise, send messages to all the students.
       :else [actions-list
               (str "You have sent an announcement to " course ".")])))
@@ -596,12 +596,22 @@
   (let [user-id (:user-id pmsg)]
     (get! state-mgr [:conversations user-id])))
 
+; Add query for students in assignment 5 by returning the list of students
+; in a course.
+(defn students-query [state-mgr pmsg]
+  (let [[course]  (:args pmsg)]
+    (list! state-mgr [:student course])))
+
 
 ;; Don't edit!
+
+;; Edited for assignment 5 by getting the list of students for a course.
 (def queries
   {"expert" experts-on-topic-query
    "ask"    experts-on-topic-query
-   "answer" conversations-for-user-query})
+   "answer" conversations-for-user-query
+   "student"  students-query
+   "announcement" students-query})
 
 
 ;; Don't edit!

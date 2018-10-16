@@ -262,7 +262,7 @@
     (is (= [(action-insert [:student "cs5278" 12345] "info")]
            (students-register {} "cs5278" 12345 "info")))))
 
-;; Integration testing
+;; Integration testing for sending and receiving announcements.
 (deftest handle-message-test
   (testing "the integration and handling of messages"
     (let [ehdlrs (merge
@@ -287,13 +287,18 @@
                     system
                     "student1"
                     "student cs5278"))))
-      (is (= "test-user2 is now an expert on food."
+      (is (= "You have sent an empty announcement."
              (<!! (handle-message
                     system
-                    "test-user2"
-                    "expert food")))))))
-      ; (is (= "what burger"
-      ;        (<!! (pending-send-msgs system "test-user")))))))
+                    "cs5278instructor"
+                    "announcement cs5278"))))
+      (is (= "You have sent an announcement to cs5278."
+             (<!! (handle-message
+                    system
+                    "cs5278instructor"
+                    "announcement cs5278 test tomorrow"))))
+      (is (= "cs5278 test tomorrow"
+             (<!! (pending-send-msgs system "student1")))))))
       ; (is (= "test-user2 is now an expert on food."
       ;        (<!! (handle-message
       ;               system
