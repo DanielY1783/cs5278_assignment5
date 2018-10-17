@@ -132,3 +132,10 @@ The sixth step is to develop and test a quick prototype of the reminders program
 The seventh step is to give the prototype to users (STEM students) to test to receive feedback on what features users like and which ones they would like to see changed. 
 
 Lastly, the goal is to repeat steps 6 and 7 to implement changes based on feedback by the users and give a new prototype to the users to test. This style of development process with a heavy emphasis on user feedback and wants was adopted because of teh fact that I have easy access to Vanderbilt students since I live on this campus. This is designed to help mitigate the risk of building the wrong software.
+
+# Using the software
+A student must register for a course to receive announcements for that course. To register, the student sends the message with format "student coursename" where the word "student" is the literal word, and the "coursename" is a one word name for the course. Example of use: "student cs5278" would register the sender as a student in the course cs5278.
+
+A instructor must be registered as the instructor of a course before they can send announcements, and only one instructor may be registered for the course. To register, the instructor sends the message with format "instructor coursename" where the word "instructor" is the literal word, and the "coursename" is a one word name for the course. Example of use: "instructor cs5278" would register the sender as the instructor of the course cs5278.
+
+To send an announcement, the instructor for a course sends a message with the format "announcement coursename some_message" where the word "announcement" is the literal word, the "coursename" is a one word name for the course, and "some_message" is a message that can be space separated. Example of use: "announcement cs5278 there is a test tomorrow" would send the announcement "there is a test tomorrow" to the cs5278 course.

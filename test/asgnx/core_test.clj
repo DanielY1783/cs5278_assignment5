@@ -254,7 +254,8 @@
 
 
 
-;; More tests for assignment 5
+;; Tests for sending and receiving announcements for courses
+;; for assignment 5.
 
 ;; Test for register-instructor function
 (deftest register-instructor-test
