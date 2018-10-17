@@ -505,15 +505,45 @@
 ;; Assignment 5 functions to implement text message based reminders for
 ;; courses.
 
-;; Takes the current application `state`, a `course` the student wants
-;; to sign up for announcements for,
-;; the student's `id` (e.g., phone number), and information
-;; about the student (`info`) and registers them as a
-;; student in the course.
-;; This function only returns a list of the actions needed rather than
-;; actually completing the action.
+;; Registers the instructor for a course by returning the action
+;; necessary to register the instructor.
+(defn instructor-register [state course id info]
+    ; Return action to insert professor into the correct course
+    ; and under the instructor group.
+    [(action-insert [course :instructor id] info)])
+
+;; Add a instructor to a specific course by creating a new
+;; state using the instructor-register function, and then
+;; returning that new state along with a message indicating
+;; that the instructor was successfully added to the course.
+;; Only one instructor may be registered for a course. If
+;; there is already an instructor registered for the course,
+;; an error message will be returned.
+;;
+;; The format of the command for the user to type is: "instructor cs5278"
+(defn add-instructor [state {:keys [args user-id]}]
+  (let [
+        ; Get the course the instructor wants to be added to.
+        course (first args)
+        ; Get the current instructor for the course.
+        current-instructor (get state :instructor)]
+    (cond
+      ; If there is currently no instructor, register the user
+      ; as the current instructor.
+      (nil? current-instructor) (let [new-state (instructor-register
+                                                 state course user-id {})]
+                                  [new-state (str user-id " is now the instructor of "
+                                                  course ".")])
+      ; If there is already an instructor for the course, return
+      ; the current state and an error message.
+      :else [state (str "There is already an instructor for " course ".")])))
+
+
+
+;; Registers the student for a course by returning the action
+;; necessary to register the instructor.
 (defn students-register [state course id info]
-    ; Return action to insert all students into the correct course
+    ; Return action to insert student into the correct course
     ; and under the students group.
     [(action-insert [course :students id] info)])
 
@@ -521,6 +551,8 @@
 ;; state using the students-register function, and then
 ;; returning that new state along with a message indicating
 ;; that the student was successfully added to the course.
+;;
+;; The format of the command for the user to type is: "student cs5278"
 (defn add-student [state {:keys [args user-id]}]
   (let [
         ; Get the course the user wants to register for
@@ -534,11 +566,17 @@
 ;; must specify the first word as "announcement" to be routed to this
 ;; function, and the second word must be the course name to be sent
 ;; to the correct course.
-;; Students parameter is a list of all students in the current course.
+;; Course-state parameter contains the state for the course, including
+;; the current instructor and students.
+;;
+;; The format of the command for the user to type is:
+;; "announcement cs5278 some message here"
 (defn send-announcement [course-state {:keys [args user-id]}]
   (let [
         ; Get the list of students from the course.
         students-list (keys (get course-state :students))
+        ; Get the instructor for the course.
+        instructor (first (keys (get course-state :instructor)))
         ; Get the course at the first word in the message.
         course (first args)
         ; Get the announcement content as everything except for the course name.
@@ -551,6 +589,9 @@
         insert-action(action-inserts [:conversations] students-list user-id)
         actions-list (concat message-action insert-action)]
     (cond
+      ; Error message if user is not the instructor for a course.
+      (not (= instructor user-id)) [[] (str "You are not the instructor for "
+                                           course ".")]
       ; Special response if announcement content is empty.
       (empty? announcement-content) [[](str "You have sent an empty announcement.")]
       ; Special response for if there are no students.
@@ -578,6 +619,7 @@
              "expert"   add-expert
              "answer"   answer-question
              "student"  add-student
+             "instructor" add-instructor
              "announcement" send-announcement})
 
 
@@ -606,7 +648,7 @@
 ; (defn students-query [state-mgr pmsg]
 ;   (let [[course]  (:args pmsg)]
 ;     (list! state-mgr [:student course])))
-(defn students-query [state-mgr pmsg]
+(defn course-query [state-mgr pmsg]
   (let [[course]  (:args pmsg)]
     (get! state-mgr [course])))
 
@@ -614,13 +656,14 @@
 
 ;; Don't edit!
 
-;; Edited for assignment 5 by getting the list of students for a course.
+;; Edited for assignment 5 by getting the state for a course.
 (def queries
   {"expert" experts-on-topic-query
    "ask"    experts-on-topic-query
    "answer" conversations-for-user-query
-   "student"  students-query
-   "announcement" students-query})
+   "student"  course-query
+   "announcement" course-query
+   "instructor" course-query})
 
 
 ;; Don't edit!

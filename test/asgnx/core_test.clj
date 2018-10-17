@@ -256,6 +256,12 @@
 
 ;; More tests for assignment 5
 
+;; Test for register-instructor function
+(deftest register-instructor-test
+  (testing "Return action to register instructor for a course"
+    (is (= [(action-insert ["cs5278" :instructor "professor1"] "info")]
+           (instructor-register {} "cs5278" "professor1" "info")))))
+
 ;; Test for register-students function
 (deftest register-students-test
   (testing "Return action to register students for a course"
@@ -272,43 +278,68 @@
           smgr   (kvstore/create state)
           system {:state-mgr smgr
                   :effect-handlers ehdlrs}]
-      (is (= "You have sent an empty announcement."
+      ; If a user is not the instructor for a course and sends an invalid
+      ; message, the user should receive a message telling them they are
+      ; not the instructor.
+      (is (= "You are not the instructor for cs5278."
              (<!! (handle-message
                     system
                     "cs5278instructor"
                     "announcement cs5278"))))
+      ; Test that user who is not the instructor for a course cannot
+      ; send a message.
+      (is (= "You are not the instructor for cs5278."
+             (<!! (handle-message
+                    system
+                    "cs5278instructor"
+                    "announcement cs5278 test tomorrow"))))
+      ; Test that instructor can successfully be added for a course.
+      (is (= "cs5278instructor is now the instructor of cs5278."
+             (<!! (handle-message
+                    system
+                    "cs5278instructor"
+                    "instructor cs5278"))))
+      ; Test that instructor sending announcement to a course without
+      ; registered students will receive an error message.
       (is (= "There are no students enrolled in cs5278."
              (<!! (handle-message
                     system
                     "cs5278instructor"
                     "announcement cs5278 test tomorrow"))))
+      ; Test that student can be added to a course.
       (is (= "student1 is now a student in cs5278."
              (<!! (handle-message
                     system
                     "student1"
                     "student cs5278"))))
+      ; Test that an instructor sending an empty announcement to a course
+      ; with a student will receive an error message.
       (is (= "You have sent an empty announcement."
              (<!! (handle-message
                     system
                     "cs5278instructor"
                     "announcement cs5278"))))
+      ; Test that an instructor is able to send a valid announcement to
+      ; a student.
       (is (= "You have sent an announcement to cs5278."
              (<!! (handle-message
                     system
                     "cs5278instructor"
                     "announcement cs5278 test tomorrow"))))
       (is (= "cs5278 announcement: test tomorrow"
-             (<!! (pending-send-msgs system "student1")))))))
-      ; (is (= "test-user2 is now an expert on food."
-      ;        (<!! (handle-message
-      ;               system
-      ;               "test-user2"
-      ;               "expert food"))))
-      ; (is (= "Asking 2 expert(s) for an answer to: \"what burger\""
-      ;        (<!! (handle-message
-      ;               system
-      ;               "test-user"
-      ;               "ask food what burger"))))
+             (<!! (pending-send-msgs system "student1"))))
+      ; Test that only one instructor can be registered for a course and
+      ; send announcements.
+      (is (= "There is already an instructor for cs5278."
+             (<!! (handle-message
+                    system
+                    "student2"
+                    "instructor cs5278"))))
+      (is (= "You are not the instructor for cs5278."
+             (<!! (handle-message
+                    system
+                    "student2"
+                    "announcement cs5278 test cancelled tomorrow!!!!!")))))))
       ; (is (= "what burger"
       ;        (<!! (pending-send-msgs system "test-user"))))
       ; (is (= "what burger"
