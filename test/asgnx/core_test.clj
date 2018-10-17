@@ -294,7 +294,7 @@
                     "cs5278instructor"
                     "announcement cs5278 test tomorrow"))))
       ; Test that instructor can successfully be added for a course.
-      (is (= "cs5278instructor is now the instructor of cs5278."
+      (is (= "cs5278instructor is now the instructor for cs5278."
              (<!! (handle-message
                     system
                     "cs5278instructor"
@@ -339,42 +339,34 @@
              (<!! (handle-message
                     system
                     "student2"
-                    "announcement cs5278 test cancelled tomorrow!!!!!")))))))
-      ; (is (= "what burger"
-      ;        (<!! (pending-send-msgs system "test-user"))))
-      ; (is (= "what burger"
-      ;        (<!! (pending-send-msgs system "test-user2"))))
-      ; (is (= "You must ask a valid question."
-      ;        (<!! (handle-message
-      ;               system
-      ;               "test-user"
-      ;               "ask food "))))
-      ; (is (= "test-user is now an expert on nashville."
-      ;        (<!! (handle-message
-      ;               system
-      ;               "test-user"
-      ;               "expert nashville"))))
-      ; (is (= "Asking 1 expert(s) for an answer to: \"what bus\""
-      ;        (<!! (handle-message
-      ;               system
-      ;               "test-user2"
-      ;               "ask nashville what bus"))))
-      ; (is (= "what bus"
-      ;        (<!! (pending-send-msgs system "test-user"))))
-      ; (is (= "Your answer was sent."
-      ;        (<!! (handle-message
-      ;              system
-      ;              "test-user"
-      ;              "answer the blue bus"))))
-      ; (is (= "the blue bus"
-      ;        (<!! (pending-send-msgs system "test-user2"))))
-      ; (is (= "You did not provide an answer."
-      ;        (<!! (handle-message
-      ;              system
-      ;              "test-user"
-      ;              "answer"))))
-      ; (is (= "You haven't been asked a question."
-      ;        (<!! (handle-message
-      ;              system
-      ;              "test-user3"
-      ;              "answer the blue bus")))))))
+                    "announcement cs5278 test cancelled tomorrow!!!!!"))))
+      ; Test for sending messages to two students.
+      (is (= "professor2 is now the instructor for math1301."
+             (<!! (handle-message
+                    system
+                    "professor2"
+                    "instructor math1301"))))
+      (is (= "student2 is now a student in math1301."
+             (<!! (handle-message
+                    system
+                    "student2"
+                    "student math1301"))))
+      (is (= "student3 is now a student in math1301."
+             (<!! (handle-message
+                    system
+                    "student3"
+                    "student math1301"))))
+      (is (= "You have sent an announcement to math1301."
+             (<!! (handle-message
+                    system
+                    "professor2"
+                    "announcement math1301 homework due tomorrow"))))
+      (is (= "math1301 announcement: homework due tomorrow"
+             (<!! (pending-send-msgs system "student2"))))
+      (is (= "math1301 announcement: homework due tomorrow"
+             (<!! (pending-send-msgs system "student3"))))
+      (is (= "You are not the instructor for math1301."
+             (<!! (handle-message
+                    system
+                    "student2"
+                    "announcement math1301 homework postponed to next week")))))))

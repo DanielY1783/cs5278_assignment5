@@ -532,7 +532,7 @@
       ; as the current instructor.
       (nil? current-instructor) (let [new-state (instructor-register
                                                  state course user-id {})]
-                                  [new-state (str user-id " is now the instructor of "
+                                  [new-state (str user-id " is now the instructor for "
                                                   course ".")])
       ; If there is already an instructor for the course, return
       ; the current state and an error message.
