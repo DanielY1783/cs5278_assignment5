@@ -260,7 +260,7 @@
 ;; Test for register-instructor function
 (deftest register-instructor-test
   (testing "Return action to register instructor for a course"
-    (is (= [(action-insert ["cs5278" :instructor "professor1"] "info")]
+    (is (= [(action-insert [:instructor "cs5278" "professor1"] "info")]
            (instructor-register {} "cs5278" "professor1" "info")))))
 
 ;; Test for register-students function
@@ -365,7 +365,14 @@
       (is (= "math1301 announcement: homework due tomorrow"
              (<!! (pending-send-msgs system "student2"))))
       (is (= "math1301 announcement: homework due tomorrow"
-             (<!! (pending-send-msgs system "student3")))))))
+             (<!! (pending-send-msgs system "student3"))))
+      ; Debugging
+      (is (= "Students: {cs5278 {student1 {}}, math1301 {student2 {}, student3 {}}}"
+             (<!! (handle-message
+                    system
+                    "professor2"
+                    "liststudents cs5278 3")))))))
+
       ; (is (= "You are not the instructor for math1301."
       ;        (<!! (handle-message
       ;               system

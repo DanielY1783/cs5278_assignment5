@@ -603,10 +603,10 @@
 
 ;; For Lambda Debugging
 (defn liststudents [state {:keys [args user-id]}]
-  (str user-id args " Students: " state))
+  [[](str "Students: " state)])
 
 (defn listinstructors [state {:keys [args user-id]}]
-  (str user-id args " Instructors: " state))
+  [[](str "Instructors: " state)])
 
 
 
@@ -663,6 +663,15 @@
   (let [[course]  (:args pmsg)]
     (list! state-mgr [:instructors course])))
 
+; Querys for debugging
+(defn liststudents-query [state-mgr pmsg]
+  (let [[course]  (:args pmsg)]
+    (get! state-mgr [:students])))
+
+(defn listinstructors-query [state-mgr pmsg]
+  (let [[course]  (:args pmsg)]
+    (get! state-mgr [:instructor])))
+
 ;; Don't edit!
 
 ;; Edited for assignment 5 by getting the state for a course.
@@ -673,8 +682,8 @@
    "student"  student-query
    "announcement" student-query
    "instructor" instructor-query
-   "liststudents" student-query
-   "listinstructors" instructor-query})
+   "liststudents" liststudents-query
+   "listinstructors" listinstructors-query})
 
 
 ;; Don't edit!
