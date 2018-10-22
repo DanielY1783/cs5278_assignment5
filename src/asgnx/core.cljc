@@ -510,7 +510,7 @@
 (defn instructor-register [state course id info]
     ; Return action to insert professor into the correct course
     ; and under the instructor group.
-    [(action-insert [course :instructor id] info)])
+    [(action-insert [:instructor course id] info)])
 
 ;; Add a instructor to a specific course by creating a new
 ;; state using the instructor-register function, and then
@@ -601,6 +601,14 @@
       :else [actions-list
               (str "You have sent an announcement to " course ".")])))
 
+;; For Lambda Debugging
+(defn liststudents [state {:keys [args user-id]}]
+  (str user-id args " Students: " state))
+
+(defn listinstructors [state {:keys [args user-id]}]
+  (str user-id args " Instructors: " state))
+
+
 
 ;; Don't edit!
 (defn stateless [f]
@@ -620,7 +628,9 @@
              "answer"   answer-question
              "student"  add-student
              "instructor" add-instructor
-             "announcement" send-announcement})
+             "announcement" send-announcement
+             "liststudents" liststudents
+             "listinstructors" listinstructors})
 
 
 ;; Asgn 3.
@@ -648,7 +658,10 @@
   (let [[course]  (:args pmsg)]
     (list! state-mgr [:students course])))
 
-
+; Query for instructors
+(defn instructor-query [state-mgr pmsg]
+  (let [[course]  (:args pmsg)]
+    (list! state-mgr [:instructors course])))
 
 ;; Don't edit!
 
@@ -659,7 +672,9 @@
    "answer" conversations-for-user-query
    "student"  student-query
    "announcement" student-query
-   "instructor" student-query})
+   "instructor" instructor-query
+   "liststudents" student-query
+   "listinstructors" instructor-query})
 
 
 ;; Don't edit!
