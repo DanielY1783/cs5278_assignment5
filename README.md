@@ -1,4 +1,4 @@
-Note: instructions folder contains original instructions for assignment from Dr. White at https://github.com/juleswhite/CSx278-2018-Asgn-5
+Note: Original instructions for assignment are from Dr. White at https://github.com/juleswhite/CSx278-2018-Asgn-5
 
 # Text message reminders for undergraduate STEM students.
 
