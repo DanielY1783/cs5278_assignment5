@@ -1,3 +1,5 @@
+Note: instructions folder contains original instructions for assignment from Dr. White at https://github.com/juleswhite/CSx278-2018-Asgn-5
+
 # Text message reminders for undergraduate STEM students.
 
 The goal of the project is to help undergraduate STEM students at Vanderbilt, because STEM students here constantly seem stressed out with coursework. From an anecdotal perspective, it seems that students in the humanities often get free extensions for late essays, while STEM students often talk about hard deadlines and a lot of work. The goal is to create an application that will help STEM students get reminders for when their assignments are due since missed deadlines are often so catastrophic for STEM students.
